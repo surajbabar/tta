@@ -12,9 +12,9 @@ class TestMetadatum < ActiveRecord::Base
   validates :test_sub_category, :presence => {:message => 'cannot be blank, Task not saved'}
   validates :test_report_type, :presence => {:message => 'cannot be blank, Task not saved'}
 
-  def get_distinct_test_category sub_project_id
-    distinct_records = TestMetadatum.find_all_by_sub_project_id(sub_project_id, :select => "DISTINCT(test_category)")
-    distinct_records
+  def self.get_distinct_test_categories_for sub_project_id
+      distinct_records = TestMetadatum.find_all_by_sub_project_id(sub_project_id, :select => "DISTINCT(test_category)")
+    distinct_records.map { |test_type| test_type.test_category }
   end
 
   def find_no_and_duration_of_test meta_data

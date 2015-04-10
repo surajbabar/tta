@@ -78,6 +78,10 @@ module DataHelper
 			arg_sub_project.id,
 			arg_test_category,
 			arg_date)
-	end
+  end
+
+  def get_distinct_categories_for(arg_sub_project_id)
+    TestMetadatum.get_distinct_test_categories_for(arg_sub_project_id)
+  end
 
 end

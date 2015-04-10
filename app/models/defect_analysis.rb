@@ -31,7 +31,7 @@ class DefectAnalysis
     @index=0
     if (test_category=='ALL')
       analysis_date=analysis_date.to_date
-      test_category =  get_distinct_test_categories_for(sub_project_id)
+      test_category =  TestMetadatum.get_distinct_test_categories_for(sub_project_id)
       test_category.each do |test_type|
         meta_data = SubProject.find(sub_project_id).test_metadatum.find_all_by_date_of_execution(analysis_date.beginning_of_day..analysis_date.end_of_day, :conditions => ["test_category = ?", test_type])
         getResultHash(test_type, meta_data)
@@ -75,12 +75,6 @@ class DefectAnalysis
     no_of_test_for_particular_error = error_hash.each_key.map { |key| error_hash[key].count }
     return error_hash, no_of_test_for_particular_error
   end
-
-  def get_distinct_test_categories_for(sub_project_id)
-    metadata_with_distinct_test_category = TestMetadatum.new.get_distinct_test_category(sub_project_id)
-    metadata_with_distinct_test_category.map { |test_type| test_type.test_category }
-  end
-
 end
 
 

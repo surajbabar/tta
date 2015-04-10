@@ -122,4 +122,33 @@ describe TestMetadatum do
       id_of(retrieved_sub_project_other_metadata.first).should be_equal_to(id_of inserted_sub_project_other_metadatum)
     end
   end
+
+  describe "get_distinct_test_categories_for" do
+    include DataHelper
+
+    let(:integration_test) {"INTEGRATION TEST"}
+    let(:unit_test) {"UNIT TEST"}
+    let(:project) {create_project}
+    let(:sub_project) {create_subproject_for_project project}
+
+    def test_type_arr_from(*test_types)
+      test_types.map{|test_type|  "#{test_type} TEST" }
+    end
+
+    def id_of (sub_project)
+      sub_project.id
+    end
+
+    it 'should give test category names for a given sub project' do
+      @jan_1_2013 ="2013-01-01 00:00:00 UTC"
+      create_metadatum(sub_project,@jan_1_2013,unit_test)
+      create_metadatum(sub_project,@jan_1_2013,integration_test)
+
+      distinct_test_categories = get_distinct_categories_for(id_of sub_project)
+      @expected_test_categories = test_type_arr_from('UNIT', 'INTEGRATION')
+
+      distinct_test_categories.should contain_all(@expected_test_categories)
+
+    end
+  end
 end

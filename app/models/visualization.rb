@@ -37,7 +37,7 @@ class Visualization
     @duration_of_test_in_Test_category=[]
     @total=0
     failure_count=0
-    get_record_with_distinct_test_category(sub_project_id)
+    @test_category = TestMetadatum.get_distinct_test_categories_for(sub_project_id)
 
     @test_category.each do |test_category|
       @test_metadata_records_for_latest_run << TestMetadatum.new.get_latest_record(sub_project_id, test_category)
@@ -51,15 +51,6 @@ class Visualization
       @no_of_failure_in_test_category << failure_count
     end
     @percent_of_tests, @duration_of_tests, @passing_test_percentage = calculatePercentageAndDuration(@no_of_test_in_test_category, @duration_of_test_in_Test_category, @total, @no_of_failure_in_test_category)
-  end
-
-
-  def get_record_with_distinct_test_category(sub_project_id)
-    metadata_with_distinct_test_category = TestMetadatum.new.get_distinct_test_category(sub_project_id)
-    @test_category=[]
-    metadata_with_distinct_test_category.each do |test_type|
-      @test_category << test_type.test_category
-    end
   end
 
   def calculatePercentageAndDuration(no_of_test_in_test_category, duration_of_test_in_test_category, total_no_of_tests, failure_count)
